@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# AllAboutMovies
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A movie browsing app: a featured-film carousel, a searchable catalog with genre filters, trailers, a watch list, and user reviews with star ratings. The frontend is React and the backend is the Spring Boot + MongoDB [AllAboutMovies API](https://github.com/Vishnu2819/AllAboutMovies_API).
 
-## Available Scripts
+**Live demo:** https://vishnu2819.github.io/AllAboutMovies_UI/
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Hero carousel:** backdrops, posters and overviews. It autoplays, pauses on hover or focus, supports arrow keys and dot navigation, and respects `prefers-reduced-motion`.
+- **Browse:** title search plus genre chips, stored in the URL so filtered views can be shared.
+- **Movie pages:** runtime, genres, the TMDB score, the community rating average, a trailer, and a watch-list toggle.
+- **Reviews:** a 1–5 star rating with optional name and text, posted to the API and shown newest first.
+- **Trailers:** a full-width YouTube player (`react-player`).
+- **Watch list:** saved in `localStorage` and kept in sync across components and tabs.
+- **Two data modes:**
+  - **Live:** set `REACT_APP_API_URL` and every request goes to the Spring Boot API.
+  - **Demo:** when no API is configured, or it can't be reached, the app uses the same catalog bundled into the site and stores reviews in the browser. A banner says when demo mode is on. This is how the GitHub Pages build runs, since Pages can only host static files.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tech
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+React 18 · React Router 7 (`HashRouter` so deep links work on Pages) · Axios · Bootstrap 5 · Font Awesome · react-player · Jest + Testing Library
 
-### `npm test`
+```
+src/
+  api/client.js        API client with demo-mode fallback (+ tests)
+  components/          Header, Hero carousel, MovieCard, Stars, DemoBanner
+  pages/               Home, MovieDetails, Trailer, Watchlist, NotFound
+  hooks/useWatchlist   localStorage-backed watch list
+  data/movies.json     bundled catalog (same seed as the API)
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Run locally
 
-### `npm run build`
+```bash
+npm install
+npm start                                            # demo mode on http://localhost:3000
+REACT_APP_API_URL=http://localhost:8080 npm start    # against a local API
+npm test
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To run the API: `cd ../AllAboutMovies_API && docker compose up --build`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deploy
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`.github/workflows/deploy.yml` tests, builds and publishes to GitHub Pages on every push to `main`. To use live data, deploy the API and set a repository variable `API_URL` (Settings → Secrets and variables → Actions → Variables).
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Movie data and images courtesy of [TMDB](https://www.themoviedb.org/). Not endorsed or certified by TMDB.
